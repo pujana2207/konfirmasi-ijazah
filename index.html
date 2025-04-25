@@ -117,7 +117,7 @@
         return;
       }
 
-      const url = `https://script.google.com/macros/s/AKfycby9DrJTG_1Gc6Sabdj2k2LyO_Cp0ueUnY39ixsic7b9Q6E4AW004otzJMbQ2X40YtsV/exec?nisn=${encodeURIComponent(nisn)}`;
+      const url = `https://script.google.com/macros/s/AKfycbytGn-5fF3a4Ue0NvX4VDvuiAD-ZPxG7Q_l-BXGgoqbxdnc6foCd6uZDX_jQNft_RIQ/exec?nisn=${encodeURIComponent(nisn)}`;
       try {
         const res = await fetch(url);
         const data = await res.json();
@@ -150,7 +150,7 @@
     }
 
     function buatFormKoreksi(data) {
-      const kolom = ["NAMA", "NIS", "NISN", "TEMPAT_LAHIR", "TANGGAL_LAHIR", "NAMA_AYAH", "NAMA_IBU"];
+      const kolom = ["NAMA", "NIS", "NISN", "TEMPAT LAHIR", "TANGGAL LAHIR", "NAMA AYAH", "NAMA IBU"];
       return kolom.map(key => `
         <div>
           <label class="checkbox-group">
@@ -173,7 +173,7 @@
 
     async function kirimKoreksi() {
       const perbaikan = {};
-      const fields = ["NAMA", "NIS", "NISN", "TEMPAT_LAHIR", "TANGGAL_LAHIR", "NAMA_AYAH", "NAMA_IBU"];
+      const fields = ["NAMA", "NIS", "NISN", "TEMPAT LAHIR", "TANGGAL LAHIR", "NAMA AYAH", "NAMA IBU"];
       let ada = false;
       fields.forEach(key => {
         const cek = document.getElementById("cek_" + key);
@@ -196,7 +196,7 @@
         perbaikan: perbaikan
       };
 
-      await fetch("https://script.google.com/macros/s/AKfycby9DrJTG_1Gc6Sabdj2k2LyO_Cp0ueUnY39ixsic7b9Q6E4AW004otzJMbQ2X40YtsV/exec", {
+      await fetch("https://script.google.com/macros/s/AKfycbytGn-5fF3a4Ue0NvX4VDvuiAD-ZPxG7Q_l-BXGgoqbxdnc6foCd6uZDX_jQNft_RIQ/exec", {
         method: "POST",
         body: JSON.stringify(payload),
         headers: { "Content-Type": "application/json" }
@@ -211,7 +211,7 @@
         nama: dataSiswa.NAMA
       };
 
-      await fetch("https://script.google.com/macros/s/AKfycby9DrJTG_1Gc6Sabdj2k2LyO_Cp0ueUnY39ixsic7b9Q6E4AW004otzJMbQ2X40YtsV/exec", {
+      await fetch("https://script.google.com/macros/s/AKfycbytGn-5fF3a4Ue0NvX4VDvuiAD-ZPxG7Q_l-BXGgoqbxdnc6foCd6uZDX_jQNft_RIQ/exec", {
         method: "POST",
         body: JSON.stringify(payload),
         headers: { "Content-Type": "application/json" }
