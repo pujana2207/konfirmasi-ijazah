@@ -1,27 +1,112 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Konfirmasi Data Ijazah</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body { font-family: Arial, sans-serif; background-color: #f5f5f5; padding: 20px; }
-    .container { max-width: 700px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-    h2 { text-align: center; }
-    label { display: block; margin-top: 10px; font-weight: bold; }
-    input, textarea, select, button { width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; }
-    button { background-color: #4CAF50; color: white; border: none; cursor: pointer; }
-    button:hover { background-color: #45a049; }
-    .data-display, .form-koreksi { display: none; margin-top: 20px; }
-    .info-box { background: #eef; padding: 15px; border-radius: 5px; margin-top: 10px; }
-    .checkbox-group { margin-top: 10px; }
-    .checkbox-group label { font-weight: normal; display: block; margin-top: 5px; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #e0f7fa, #fff);
+      padding: 40px 20px;
+      margin: 0;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .logo img {
+      width: 80px;
+      height: auto;
+    }
+
+    h2 {
+      text-align: center;
+      color: #006064;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+    }
+
+    input, textarea, select, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: #00897b;
+      color: white;
+      border: none;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #00796b;
+    }
+
+    .data-display, .form-koreksi {
+      display: none;
+      margin-top: 25px;
+    }
+
+    .info-box {
+      background: #e0f2f1;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 10px;
+      line-height: 1.6;
+    }
+
+    .checkbox-group {
+      margin-top: 15px;
+    }
+
+    .checkbox-group label {
+      font-weight: normal;
+      display: block;
+      margin-top: 10px;
+    }
+
+    .checkbox-group input[type="text"] {
+      margin-top: 5px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 20px 10px;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="container">
+    <div class="logo">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Logo_SMA_Negeri_1_Klungkung.png" alt="Logo Sekolah" />
+    </div>
     <h2>Konfirmasi Data Ijazah</h2>
+
     <div id="form-nisn">
       <label for="nisn">Masukkan NISN Anda:</label>
       <input type="text" id="nisn" required />
@@ -38,33 +123,15 @@
     <div id="form-koreksi" class="form-koreksi">
       <h3>Form Koreksi Data</h3>
       <div class="checkbox-group">
-        <label><input type="checkbox" onchange="toggleInput('KELAS')"> Kelas</label>
-        <input type="text" id="input-KELAS" placeholder="Perbaikan Kelas" style="display:none" />
-
-        <label><input type="checkbox" onchange="toggleInput('NIS')"> NIS</label>
-        <input type="text" id="input-NIS" placeholder="Perbaikan NIS" style="display:none" />
-
-        <label><input type="checkbox" onchange="toggleInput('NISN')"> NISN</label>
-        <input type="text" id="input-NISN" placeholder="Perbaikan NISN" style="display:none" />
-
-        <label><input type="checkbox" onchange="toggleInput('NAMA')"> Nama</label>
-        <input type="text" id="input-NAMA" placeholder="Perbaikan Nama" style="display:none" />
-
-        <label><input type="checkbox" onchange="toggleInput('TEMPAT_LAHIR')"> Tempat Lahir</label>
-        <input type="text" id="input-TEMPAT_LAHIR" placeholder="Perbaikan Tempat Lahir" style="display:none" />
-
-        <label><input type="checkbox" onchange="toggleInput('TANGGAL_LAHIR')"> Tanggal Lahir</label>
-        <input type="text" id="input-TANGGAL_LAHIR" placeholder="Perbaikan Tanggal Lahir" style="display:none" />
-
-        <label><input type="checkbox" onchange="toggleInput('NAMA_AYAH')"> Nama Ayah</label>
-        <input type="text" id="input-NAMA_AYAH" placeholder="Perbaikan Nama Ayah" style="display:none" />
-
-        <label><input type="checkbox" onchange="toggleInput('NAMA_IBU')"> Nama Ibu</label>
-        <input type="text" id="input-NAMA_IBU" placeholder="Perbaikan Nama Ibu" style="display:none" />
+        <!-- Input field group -->
+        ${["KELAS", "NIS", "NISN", "NAMA", "TEMPAT_LAHIR", "TANGGAL_LAHIR", "NAMA_AYAH", "NAMA_IBU"].map(field => `
+          <label><input type="checkbox" onchange="toggleInput('${field}')"> ${field.replace('_', ' ')}</label>
+          <input type="text" id="input-${field}" placeholder="Perbaikan ${field.replace('_', ' ')}" style="display:none" />
+        `).join('')}
       </div>
 
       <label for="catatan">Catatan tambahan (opsional):</label>
-      <textarea id="catatan"></textarea>
+      <textarea id="catatan" rows="3" placeholder="Tambahkan penjelasan jika perlu..."></textarea>
 
       <button onclick="kirimKoreksi()">Kirim Koreksi</button>
     </div>
