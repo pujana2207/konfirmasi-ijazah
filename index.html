@@ -1,219 +1,211 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Konfirmasi Data Ijazah</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #e0f7fa, #fff);
-      padding: 40px 20px;
+      background: linear-gradient(to right, #e0f7fa, #fff);
       margin: 0;
-    }
-
-    .container {
-      max-width: 720px;
-      margin: auto;
-      background: #fff;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    }
-
-    .logo {
+      padding: 0;
       display: flex;
       justify-content: center;
-      margin-bottom: 20px;
     }
-
-    .logo img {
+    .container {
+      max-width: 700px;
+      width: 100%;
+      background: white;
+      margin: 40px 20px;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .logo {
       width: 80px;
-      height: auto;
+      display: block;
+      margin: 0 auto 15px;
     }
-
-    h2 {
+    h1 {
       text-align: center;
-      color: #006064;
-      margin-bottom: 20px;
+      color: #00796B;
     }
-
     label {
       display: block;
-      margin-top: 15px;
+      margin-top: 10px;
       font-weight: 600;
     }
-
-    input, textarea, select, button {
+    input[type="text"], textarea, select {
       width: 100%;
-      padding: 12px;
+      padding: 10px;
       margin-top: 5px;
       border-radius: 8px;
       border: 1px solid #ccc;
-      font-size: 1rem;
+      box-sizing: border-box;
     }
-
     button {
-      background-color: #00897b;
+      margin-top: 20px;
+      background-color: #00796B;
       color: white;
+      padding: 10px 20px;
       border: none;
-      font-weight: 600;
-      transition: background-color 0.3s ease;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
     }
-
     button:hover {
-      background-color: #00796b;
+      background-color: #004D40;
     }
-
-    .data-display, .form-koreksi {
+    .status {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #d32f2f;
+      text-align: center;
+    }
+    .hidden {
       display: none;
-      margin-top: 25px;
     }
-
-    .info-box {
-      background: #e0f2f1;
-      padding: 20px;
-      border-radius: 10px;
-      margin-top: 10px;
-      line-height: 1.6;
-    }
-
-    .checkbox-group {
-      margin-top: 15px;
-    }
-
-    .checkbox-group label {
-      font-weight: normal;
-      display: block;
-      margin-top: 10px;
-    }
-
-    .checkbox-group input[type="text"] {
-      margin-top: 5px;
-    }
-
-    @media (max-width: 600px) {
-      body {
-        padding: 20px 10px;
-      }
+    .form-section {
+      margin-top: 20px;
+      border-top: 1px solid #eee;
+      padding-top: 15px;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="logo">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Logo_SMA_Negeri_1_Klungkung.png" alt="Logo Sekolah" />
-    </div>
-    <h2>Konfirmasi Data Ijazah</h2>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Lambang_Kemdikbud.png/600px-Lambang_Kemdikbud.png" alt="Logo Sekolah" class="logo">
+    <h1>Konfirmasi Data Ijazah</h1>
 
-    <div id="form-nisn">
-      <label for="nisn">Masukkan NISN Anda:</label>
-      <input type="text" id="nisn" required />
-      <button onclick="cariData()">Lihat Data</button>
-    </div>
+    <label for="nisn">Masukkan NISN:</label>
+    <input type="text" id="nisn" placeholder="Contoh: 1234567890">
+    <button onclick="cariData()">Cari Data</button>
+    <div class="status" id="status"></div>
 
-    <div id="data-siswa" class="data-display">
+    <div id="dataSiswa" class="form-section hidden">
       <h3>Data Anda:</h3>
-      <div class="info-box" id="hasil-data"></div>
-      <button onclick="dataBenar()">Data Saya Sudah Benar</button>
-      <button onclick="tampilkanFormKoreksi()">Ada Kesalahan Data</button>
-    </div>
+      <div id="infoSiswa"></div>
 
-    <div id="form-koreksi" class="form-koreksi">
-      <h3>Form Koreksi Data</h3>
-      <div class="checkbox-group">
-        <!-- Input field group -->
-        ${["KELAS", "NIS", "NISN", "NAMA", "TEMPAT_LAHIR", "TANGGAL_LAHIR", "NAMA_AYAH", "NAMA_IBU"].map(field => `
-          <label><input type="checkbox" onchange="toggleInput('${field}')"> ${field.replace('_', ' ')}</label>
-          <input type="text" id="input-${field}" placeholder="Perbaikan ${field.replace('_', ' ')}" style="display:none" />
-        `).join('')}
-      </div>
+      <h4>Apakah data ini sudah benar?</h4>
+      <button onclick="tandaiBenar()">✅ Sudah Benar</button>
 
-      <label for="catatan">Catatan tambahan (opsional):</label>
-      <textarea id="catatan" rows="3" placeholder="Tambahkan penjelasan jika perlu..."></textarea>
+      <h4>Perlu Koreksi:</h4>
+      <label><input type="checkbox" class="chk" value="NAMA" onchange="toggleInput(this)"> Nama</label>
+      <label><input type="checkbox" class="chk" value="TEMPAT_LAHIR" onchange="toggleInput(this)"> Tempat Lahir</label>
+      <label><input type="checkbox" class="chk" value="TANGGAL_LAHIR" onchange="toggleInput(this)"> Tanggal Lahir</label>
+      <label><input type="checkbox" class="chk" value="NAMA_AYAH" onchange="toggleInput(this)"> Nama Ayah</label>
+      <label><input type="checkbox" class="chk" value="NAMA_IBU" onchange="toggleInput(this)"> Nama Ibu</label>
 
+      <div id="formPerbaikan" class="hidden form-section"></div>
+
+      <label for="catatan">Catatan Tambahan:</label>
+      <textarea id="catatan" rows="3" placeholder="Tulis keterangan jika perlu..."></textarea>
       <button onclick="kirimKoreksi()">Kirim Koreksi</button>
     </div>
   </div>
 
   <script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxxyO4i8AxZJJ2bzIOR1jUYxtnsSZ6yvKDABZnlqVjekxkxuVbTpf5rmLMHkCoXs8pg/exec'; // ganti dengan URL Web Apps kamu
     let dataSiswa = {};
 
     function cariData() {
-      const nisn = document.getElementById("nisn").value;
-      if (!nisn) return alert("Silakan masukkan NISN");
+      const nisn = document.getElementById('nisn').value.trim();
+      const status = document.getElementById('status');
+      status.style.color = "black";
+      status.textContent = "⏳ Memuat data...";
 
-      fetch(`https://script.google.com/macros/s/AKfycbzyJ3fCvbby93XSNpyuomNgMEwE5lFgi-NRv1NfF7cLfDvJIeyqSagKSBpqkO-UJZY/exec?nisn=${nisn}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.error) {
-            alert("Data tidak ditemukan!");
-            return;
-          }
-          dataSiswa = data;
-          document.getElementById("form-nisn").style.display = "none";
-          document.getElementById("data-siswa").style.display = "block";
-
-          document.getElementById("hasil-data").innerHTML = `
-            <p><strong>Kelas:</strong> ${data.KELAS}</p>
-            <p><strong>NIS:</strong> ${data.NIS}</p>
-            <p><strong>NISN:</strong> ${data.NISN}</p>
-            <p><strong>Nama:</strong> ${data.NAMA}</p>
-            <p><strong>Tempat Lahir:</strong> ${data["TEMPAT LAHIR"]}</p>
-            <p><strong>Tanggal Lahir:</strong> ${data["TANGGAL LAHIR"]}</p>
-            <p><strong>Nama Ayah:</strong> ${data["NAMA AYAH"]}</p>
-            <p><strong>Nama Ibu:</strong> ${data["NAMA IBU"]}</p>
-          `;
-        })
-        .catch(err => alert("Terjadi kesalahan saat mengambil data"));
-    }
-
-    function dataBenar() {
-      alert("Terima kasih! Data Anda sudah tercatat sebagai benar.");
-      location.reload();
-    }
-
-    function tampilkanFormKoreksi() {
-      document.getElementById("form-koreksi").style.display = "block";
-    }
-
-    function toggleInput(id) {
-      const input = document.getElementById("input-" + id);
-      input.style.display = input.style.display === "none" ? "block" : "none";
-    }
-
-    function kirimKoreksi() {
-      const perbaikan = {};
-      ["KELAS", "NIS", "NISN", "NAMA", "TEMPAT_LAHIR", "TANGGAL_LAHIR", "NAMA_AYAH", "NAMA_IBU"].forEach(field => {
-        const input = document.getElementById("input-" + field);
-        if (input && input.style.display === "block" && input.value.trim()) {
-          perbaikan[field] = input.value.trim();
-        }
-      });
-
-      if (Object.keys(perbaikan).length === 0) {
-        alert("Silakan pilih dan isi data yang ingin dikoreksi.");
+      if (!nisn) {
+        status.style.color = "red";
+        status.textContent = "❌ Silakan masukkan NISN.";
         return;
       }
 
-      const data = {
-        nisn: dataSiswa.NISN,
-        nama: dataSiswa.NAMA,
-        perbaikan: perbaikan,
-        catatan: document.getElementById("catatan").value
-      };
+      fetch(`${scriptURL}?nisn=${nisn}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.error) {
+            status.style.color = "red";
+            status.textContent = "❌ Data tidak ditemukan.";
+            return;
+          }
+          dataSiswa = data;
+          document.getElementById('infoSiswa').innerHTML = `
+            <p><strong>Nama:</strong> ${data.NAMA}</p>
+            <p><strong>Tempat Lahir:</strong> ${data.TEMPAT_LAHIR}</p>
+            <p><strong>Tanggal Lahir:</strong> ${data.TANGGAL_LAHIR}</p>
+            <p><strong>Nama Ayah:</strong> ${data.NAMA_AYAH}</p>
+            <p><strong>Nama Ibu:</strong> ${data.NAMA_IBU}</p>
+          `;
+          document.getElementById('dataSiswa').classList.remove('hidden');
+          status.textContent = "";
+        })
+        .catch(() => {
+          status.style.color = "red";
+          status.textContent = "❌ Terjadi kesalahan.";
+        });
+    }
 
-      fetch("https://script.google.com/macros/s/AKfycbzyJ3fCvbby93XSNpyuomNgMEwE5lFgi-NRv1NfF7cLfDvJIeyqSagKSBpqkO-UJZY/exec", {
-        method: "POST",
-        body: JSON.stringify(data)
-      })
-      .then(res => res.text())
-      .then(msg => {
-        alert("Koreksi berhasil dikirim!");
-        location.reload();
-      })
-      .catch(err => alert("Gagal mengirim koreksi"));
+    function toggleInput(checkbox) {
+      const formDiv = document.getElementById('formPerbaikan');
+      if (checkbox.checked) {
+        formDiv.classList.remove('hidden');
+        const label = checkbox.nextSibling.textContent.trim();
+        const input = document.createElement('input');
+        input.type = "text";
+        input.id = "input_" + checkbox.value;
+        input.placeholder = `Perbaikan ${label}`;
+        input.className = 'perbaikanInput';
+        input.setAttribute('data-field', checkbox.value);
+        formDiv.appendChild(input);
+      } else {
+        const input = document.querySelector(`#input_${checkbox.value}`);
+        if (input) input.remove();
+        if (formDiv.children.length === 0) {
+          formDiv.classList.add('hidden');
+        }
+      }
+    }
+
+    function tandaiBenar() {
+      fetch(scriptURL, {
+        method: 'POST',
+        body: JSON.stringify({
+          nisn: dataSiswa.NISN,
+          nama: dataSiswa.NAMA,
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(res => res.text())
+        .then(msg => {
+          alert(msg);
+        });
+    }
+
+    function kirimKoreksi() {
+      const koreksi = {};
+      const inputs = document.querySelectorAll('.perbaikanInput');
+      inputs.forEach(input => {
+        koreksi[input.dataset.field] = input.value;
+      });
+
+      fetch(scriptURL, {
+        method: 'POST',
+        body: JSON.stringify({
+          nisn: dataSiswa.NISN,
+          nama: dataSiswa.NAMA,
+          perbaikan: koreksi,
+          catatan: document.getElementById('catatan').value
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(res => res.text())
+        .then(msg => {
+          alert(msg);
+        });
     }
   </script>
 </body>
