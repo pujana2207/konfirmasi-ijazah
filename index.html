@@ -85,12 +85,6 @@
       margin: 0 auto 15px;
       width: 80px;
     }
-    .info-box {
-      background: #e3f2fd;
-      padding: 15px;
-      border-radius: 8px;
-      margin-top: 15px;
-    }
     .catatan-penting {
       background-color: #fff3e0;
       border-left: 5px solid #ff9800;
@@ -98,20 +92,13 @@
       margin-top: 20px;
       font-weight: bold;
     }
-     .info-box {
-      background: #e3f2fd;
-      padding: 15px;
-      border-radius: 8px;
-      margin-top: 15px;
+
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      color: #0d47a1;
+      font-size: 14px;
     }
-    .catatan-penting {
-      background-color: #fff3e0;
-      border-left: 5px solid #ff9800;
-      padding: 15px;
-      margin-top: 20px;
-      font-weight: bold;
-    }
-  </style>
   </style>
 </head>
 <body>
@@ -127,7 +114,7 @@
         <span></span><span></span><span></span>
       </div>
     </div>
-     <!-- Menambahkan box informasi penting -->
+
     <div class="catatan-penting">
       <p><strong>Catatan Penting:</strong> Sebelum mengonfirmasi data, pastikan Anda telah mempersiapkan Ijazah SD dan Akta Kelahiran Anda. Data yang Anda konfirmasi akan cocok dengan dokumen-dokumen ini untuk menghindari kesalahan.</p>
     </div>
@@ -172,6 +159,11 @@
 
       <button onclick="kirimKoreksi()">Kirim Koreksi</button>
     </div>
+
+  </div>
+
+  <div class="footer">
+    <p>2025 | SMP Negeri 1 Sukasada | Gede Pujana</p>
   </div>
 
   <script>
@@ -195,7 +187,7 @@
           document.getElementById("form-nisn").style.display = "none";
           document.getElementById("data-siswa").style.display = "block";
 
-          document.getElementById("hasil-data").innerHTML = ` 
+          document.getElementById("hasil-data").innerHTML = `
             <p><strong>Kelas:</strong> ${data.KELAS}</p>
             <p><strong>NIS:</strong> ${data.NIS}</p>
             <p><strong>NISN:</strong> ${data.NISN}</p>
@@ -246,21 +238,14 @@
       const perbaikan = {};
       ["KELAS", "NIS", "NISN", "NAMA", "TEMPAT_LAHIR", "TANGGAL_LAHIR", "NAMA_AYAH", "NAMA_IBU"].forEach(field => {
         const input = document.getElementById("input-" + field);
-        if (input && input.style.display === "block" && input.value.trim()) {
-          perbaikan[field] = input.value.trim();
-        }
+        if (input.value) perbaikan[field] = input.value;
       });
-
-      if (Object.keys(perbaikan).length === 0) {
-        alert("Silakan pilih dan isi data yang ingin dikoreksi.");
-        return;
-      }
+      const catatan = document.getElementById("catatan").value;
 
       const data = {
         nisn: dataSiswa.NISN,
-        nama: dataSiswa.NAMA,
-        perbaikan: perbaikan,
-        catatan: document.getElementById("catatan").value
+        perbaikan: JSON.stringify(perbaikan),
+        catatan: catatan
       };
 
       fetch("https://script.google.com/macros/s/AKfycbzNjKC5UckOjEcxLXBDng2XqBi0ztma-HJx7P0CL5U3khbgI966EQ04m1DSrJPQeej0/exec", {
@@ -269,10 +254,10 @@
       })
       .then(res => res.text())
       .then(msg => {
-        alert("Koreksi berhasil dikirim!");
+        alert("Perbaikan data berhasil dikirim.");
         location.reload();
       })
-      .catch(err => alert("Gagal mengirim koreksi"));
+      .catch(err => alert("Gagal mengirim perbaikan."));
     }
   </script>
 </body>
