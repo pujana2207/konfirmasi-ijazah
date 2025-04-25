@@ -1,223 +1,152 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Koreksi Data Siswa</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Konfirmasi Data Ijazah</title>
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: #f4f6f8;
-      margin: 0;
-      padding: 2rem;
-      color: #333;
-    }
-    .container {
-      max-width: 800px;
-      margin: auto;
-      background: #fff;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    h2 {
-      text-align: center;
-      color: #0066cc;
-    }
-    label {
-      font-weight: 600;
-      margin-top: 1rem;
-      display: block;
-    }
-    input[type="text"], textarea {
-      width: 100%;
-      padding: 0.6rem;
-      margin-top: 0.3rem;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      margin-bottom: 1rem;
-    }
-    button {
-      background-color: #0066cc;
-      color: white;
-      border: none;
-      padding: 0.8rem 1.5rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 1rem;
-      margin-top: 1rem;
-    }
-    button:hover {
-      background-color: #0055aa;
-    }
-    .field-group {
-      margin-bottom: 1rem;
-    }
-    .checkbox-group {
-      display: flex;
-      align-items: center;
-    }
-    .checkbox-group input {
-      margin-right: 0.5rem;
-    }
-    .hidden {
-      display: none;
-    }
-    .result-box {
-      background: #eaf4ff;
-      padding: 1rem;
-      border-radius: 8px;
-      margin-bottom: 1rem;
-    }
-    .success {
-      background-color: #d4edda;
-      color: #155724;
-      padding: 1rem;
-      border-radius: 8px;
-      margin-top: 1rem;
-    }
+    body { font-family: Arial, sans-serif; background-color: #f5f5f5; padding: 20px; }
+    .container { max-width: 700px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    h2 { text-align: center; }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input, textarea, select, button { width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; }
+    button { background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+    button:hover { background-color: #45a049; }
+    .data-display, .form-koreksi { display: none; margin-top: 20px; }
+    .info-box { background: #eef; padding: 15px; border-radius: 5px; margin-top: 10px; }
+    .checkbox-group { margin-top: 10px; }
+    .checkbox-group label { font-weight: normal; display: block; margin-top: 5px; }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>Koreksi Data Siswa</h2>
-    <div class="field-group">
-      <label for="nisnCari">Masukkan NISN:</label>
-      <input type="text" id="nisnCari" placeholder="Contoh: 1234567890" />
-      <button onclick="cariData()">Cari Data</button>
+    <h2>Konfirmasi Data Ijazah</h2>
+    <div id="form-nisn">
+      <label for="nisn">Masukkan NISN Anda:</label>
+      <input type="text" id="nisn" required />
+      <button onclick="cariData()">Lihat Data</button>
     </div>
-    <div id="hasilPencarian"></div>
 
-    <form id="formPerbaikan" class="hidden">
-      <div id="formKoreksi"></div>
-      <label for="catatan">Catatan Tambahan:</label>
-      <textarea id="catatan" rows="3" placeholder="Tulis jika ada penjelasan tambahan..."></textarea>
-      <button type="button" onclick="kirimKoreksi()">Kirim Koreksi</button>
-      <button type="button" onclick="tandaiSesuai()">Tandai Data Sudah Sesuai</button>
-    </form>
-    <div id="pesan"></div>
+    <div id="data-siswa" class="data-display">
+      <h3>Data Anda:</h3>
+      <div class="info-box" id="hasil-data"></div>
+      <button onclick="dataBenar()">Data Saya Sudah Benar</button>
+      <button onclick="tampilkanFormKoreksi()">Ada Kesalahan Data</button>
+    </div>
+
+    <div id="form-koreksi" class="form-koreksi">
+      <h3>Form Koreksi Data</h3>
+      <div class="checkbox-group">
+        <label><input type="checkbox" onchange="toggleInput('KELAS')"> Kelas</label>
+        <input type="text" id="input-KELAS" placeholder="Perbaikan Kelas" style="display:none" />
+
+        <label><input type="checkbox" onchange="toggleInput('NIS')"> NIS</label>
+        <input type="text" id="input-NIS" placeholder="Perbaikan NIS" style="display:none" />
+
+        <label><input type="checkbox" onchange="toggleInput('NISN')"> NISN</label>
+        <input type="text" id="input-NISN" placeholder="Perbaikan NISN" style="display:none" />
+
+        <label><input type="checkbox" onchange="toggleInput('NAMA')"> Nama</label>
+        <input type="text" id="input-NAMA" placeholder="Perbaikan Nama" style="display:none" />
+
+        <label><input type="checkbox" onchange="toggleInput('TEMPAT_LAHIR')"> Tempat Lahir</label>
+        <input type="text" id="input-TEMPAT_LAHIR" placeholder="Perbaikan Tempat Lahir" style="display:none" />
+
+        <label><input type="checkbox" onchange="toggleInput('TANGGAL_LAHIR')"> Tanggal Lahir</label>
+        <input type="text" id="input-TANGGAL_LAHIR" placeholder="Perbaikan Tanggal Lahir" style="display:none" />
+
+        <label><input type="checkbox" onchange="toggleInput('NAMA_AYAH')"> Nama Ayah</label>
+        <input type="text" id="input-NAMA_AYAH" placeholder="Perbaikan Nama Ayah" style="display:none" />
+
+        <label><input type="checkbox" onchange="toggleInput('NAMA_IBU')"> Nama Ibu</label>
+        <input type="text" id="input-NAMA_IBU" placeholder="Perbaikan Nama Ibu" style="display:none" />
+      </div>
+
+      <label for="catatan">Catatan tambahan (opsional):</label>
+      <textarea id="catatan"></textarea>
+
+      <button onclick="kirimKoreksi()">Kirim Koreksi</button>
+    </div>
   </div>
 
   <script>
-    let dataSiswa = null;
-    const form = document.getElementById("formPerbaikan");
-    const hasil = document.getElementById("hasilPencarian");
-    const formKoreksi = document.getElementById("formKoreksi");
-    const pesan = document.getElementById("pesan");
+    let dataSiswa = {};
 
-    async function cariData() {
-      hasil.innerHTML = "⏳ Memuat data...";
-      form.classList.add("hidden");
-      pesan.innerHTML = "";
+    function cariData() {
+      const nisn = document.getElementById("nisn").value;
+      if (!nisn) return alert("Silakan masukkan NISN");
 
-      const nisn = document.getElementById("nisnCari").value.trim();
-      if (!nisn) {
-        hasil.innerHTML = "⚠️ Masukkan NISN terlebih dahulu.";
-        return;
-      }
+      fetch(`https://script.google.com/macros/s/AKfycbxLH3qLSbvO4_6TF7qCec7ob0ubtXazQtHbfLpQkFc5XX9RaTtdjMbk7rR7_v6x5ITx/exec?nisn=${nisn}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.error) {
+            alert("Data tidak ditemukan!");
+            return;
+          }
+          dataSiswa = data;
+          document.getElementById("form-nisn").style.display = "none";
+          document.getElementById("data-siswa").style.display = "block";
 
-      const url = `https://script.google.com/macros/s/AKfycbytGn-5fF3a4Ue0NvX4VDvuiAD-ZPxG7Q_l-BXGgoqbxdnc6foCd6uZDX_jQNft_RIQ/exec?nisn=${encodeURIComponent(nisn)}`;
-      try {
-        const res = await fetch(url);
-        const data = await res.json();
-        if (data.error) {
-          hasil.innerHTML = `<div class="result-box">❌ NISN tidak ditemukan.</div>`;
-          return;
-        }
-
-        dataSiswa = data;
-        tampilkanData(data);
-      } catch (err) {
-        hasil.innerHTML = "❌ Gagal mengambil data.";
-      }
+          document.getElementById("hasil-data").innerHTML = `
+            <p><strong>Kelas:</strong> ${data.KELAS}</p>
+            <p><strong>NIS:</strong> ${data.NIS}</p>
+            <p><strong>NISN:</strong> ${data.NISN}</p>
+            <p><strong>Nama:</strong> ${data.NAMA}</p>
+            <p><strong>Tempat Lahir:</strong> ${data["TEMPAT LAHIR"]}</p>
+            <p><strong>Tanggal Lahir:</strong> ${data["TANGGAL LAHIR"]}</p>
+            <p><strong>Nama Ayah:</strong> ${data["NAMA AYAH"]}</p>
+            <p><strong>Nama Ibu:</strong> ${data["NAMA IBU"]}</p>
+          `;
+        })
+        .catch(err => alert("Terjadi kesalahan saat mengambil data"));
     }
 
-    function tampilkanData(data) {
-      hasil.innerHTML = `
-        <div class="result-box">
-          <strong>Nama:</strong> ${data.NAMA}<br/>
-          <strong>NIS:</strong> ${data.NIS}<br/>
-          <strong>NISN:</strong> ${data.NISN}<br/>
-          <strong>Tempat Lahir:</strong> ${data.TEMPAT LAHIR}<br/>
-          <strong>Tanggal Lahir:</strong> ${data.TANGGAL LAHIR}<br/>
-          <strong>Nama Ayah:</strong> ${data.NAMA AYAH}<br/>
-          <strong>Nama Ibu:</strong> ${data.NAMA IBU}
-        </div>
-      `;
-      formKoreksi.innerHTML = buatFormKoreksi(data);
-      form.classList.remove("hidden");
+    function dataBenar() {
+      alert("Terima kasih! Data Anda sudah tercatat sebagai benar.");
+      location.reload();
     }
 
-    function buatFormKoreksi(data) {
-      const kolom = ["NAMA", "NIS", "NISN", "TEMPAT LAHIR", "TANGGAL LAHIR", "NAMA AYAH", "NAMA IBU"];
-      return kolom.map(key => `
-        <div>
-          <label class="checkbox-group">
-            <input type="checkbox" onchange="toggleInput('${key}')" id="cek_${key}"> Perbaiki ${key.replace("_", " ").replace("_", " ")}
-          </label>
-          <input type="text" id="input_${key}" class="hidden" placeholder="Masukkan ${key.replace("_", " ").toLowerCase()}" />
-        </div>
-      `).join("");
+    function tampilkanFormKoreksi() {
+      document.getElementById("form-koreksi").style.display = "block";
     }
 
-    function toggleInput(field) {
-      const checkbox = document.getElementById("cek_" + field);
-      const input = document.getElementById("input_" + field);
-      if (checkbox.checked) {
-        input.classList.remove("hidden");
-      } else {
-        input.classList.add("hidden");
-      }
+    function toggleInput(id) {
+      const input = document.getElementById("input-" + id);
+      input.style.display = input.style.display === "none" ? "block" : "none";
     }
 
-    async function kirimKoreksi() {
+    function kirimKoreksi() {
       const perbaikan = {};
-      const fields = ["NAMA", "NIS", "NISN", "TEMPAT LAHIR", "TANGGAL LAHIR", "NAMA AYAH", "NAMA IBU"];
-      let ada = false;
-      fields.forEach(key => {
-        const cek = document.getElementById("cek_" + key);
-        const val = document.getElementById("input_" + key).value.trim();
-        if (cek.checked && val) {
-          perbaikan[key] = val;
-          ada = true;
+      ["KELAS", "NIS", "NISN", "NAMA", "TEMPAT_LAHIR", "TANGGAL_LAHIR", "NAMA_AYAH", "NAMA_IBU"].forEach(field => {
+        const input = document.getElementById("input-" + field);
+        if (input && input.style.display === "block" && input.value.trim()) {
+          perbaikan[field] = input.value.trim();
         }
       });
 
-      if (!ada) {
-        alert("⚠️ Pilih dan isi minimal satu perbaikan.");
+      if (Object.keys(perbaikan).length === 0) {
+        alert("Silakan pilih dan isi data yang ingin dikoreksi.");
         return;
       }
 
-      const payload = {
+      const data = {
         nisn: dataSiswa.NISN,
         nama: dataSiswa.NAMA,
-        catatan: document.getElementById("catatan").value.trim(),
-        perbaikan: perbaikan
+        perbaikan: perbaikan,
+        catatan: document.getElementById("catatan").value
       };
 
-      await fetch("https://script.google.com/macros/s/AKfycbytGn-5fF3a4Ue0NvX4VDvuiAD-ZPxG7Q_l-BXGgoqbxdnc6foCd6uZDX_jQNft_RIQ/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbxLH3qLSbvO4_6TF7qCec7ob0ubtXazQtHbfLpQkFc5XX9RaTtdjMbk7rR7_v6x5ITx/exec", {
         method: "POST",
-        body: JSON.stringify(payload),
-        headers: { "Content-Type": "application/json" }
-      });
-
-      pesan.innerHTML = `<div class="success">✅ Koreksi berhasil dikirim.</div>`;
-    }
-
-    async function tandaiSesuai() {
-      const payload = {
-        nisn: dataSiswa.NISN,
-        nama: dataSiswa.NAMA
-      };
-
-      await fetch("https://script.google.com/macros/s/AKfycbytGn-5fF3a4Ue0NvX4VDvuiAD-ZPxG7Q_l-BXGgoqbxdnc6foCd6uZDX_jQNft_RIQ/exec", {
-        method: "POST",
-        body: JSON.stringify(payload),
-        headers: { "Content-Type": "application/json" }
-      });
-
-      pesan.innerHTML = `<div class="success">✅ Data ditandai sebagai sesuai.</div>`;
+        body: JSON.stringify(data)
+      })
+      .then(res => res.text())
+      .then(msg => {
+        alert("Koreksi berhasil dikirim!");
+        location.reload();
+      })
+      .catch(err => alert("Gagal mengirim koreksi"));
     }
   </script>
 </body>
